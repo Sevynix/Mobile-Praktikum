@@ -1,28 +1,22 @@
+import 'package:dio/dio.dart';
 import 'package:learning_project/features/dosen/data/models/dosen_model.dart';
 
 class DosenRepository {
-  Future<List<DosenModel>> getDosenList() async {
-    await Future.delayed(const Duration(seconds: 1));
+  final Dio _dio = Dio();
 
-    return [
-      DosenModel(
-        nama: 'Anank Prasetyo',
-        nip: '123456789',
-        email: 'anank.prasetyo@example.com',
-        jurusan: 'Teknik Informatika',
-      ),
-      DosenModel(
-        nama: 'Rachman Sinatriya',
-        nip: '987654321',
-        email: 'rachman.sinatriya@example.com',
-        jurusan: 'Teknik Informatika',
-      ),
-      DosenModel(
-        nama: 'Alfian Sukma',
-        nip: '456789123',
-        email: 'alfian.sukma@example.com',
-        jurusan: 'Teknik Informatika',
-      ),
-    ];
+  Future<List<DosenModel>> getDosenList() async {
+    final response = await _dio.get(
+      'https://jsonplaceholder.typicode.com/users',
+      options: Options(headers: {'Accept': 'application/json'}),
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = response.data;
+      print(data);
+      return data.map((json) => DosenModel.fromJson(json)).toList();
+    } else {
+      print('Error: ${response.statusCode} - ${response.data}');
+      throw Exception('Gagal memuat data dosen: ${response.statusCode}');
+    }
   }
 }
