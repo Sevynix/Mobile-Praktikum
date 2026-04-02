@@ -17,9 +17,9 @@ final savedUsersProvider = FutureProvider<List<Map<String, String>>>((ref) async
   return savedUsers
       .map(
         (user) => {
-          'userId': user['user_id'].toString(),
+          'user_id': user['user_id'].toString(),
           'username': user['username'].toString(),
-          'savedAt': user['saved_at'].toString(),
+          'saved_at': user['saved_at'].toString(),
         },
       )
       .toList();
